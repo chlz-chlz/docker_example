@@ -1,0 +1,7 @@
+CREATE DATABASE IF NOT EXISTS `study`
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_general_ci;
+
+CREATE USER 'study'@'%' IDENTIFIED BY 'local';
+GRANT ALL PRIVILEGES ON *.* TO 'study'@'%';
+FLUSH PRIVILEGES;

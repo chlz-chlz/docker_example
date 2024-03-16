@@ -1,0 +1,38 @@
+version: '3.9'
+
+services:
+  php:
+    container_name: study_php
+    build:
+      context: .
+      dockerfile: provisioning/php/Dockerfile
+    volumes:
+      - ./app:/srv/app
+
+  nginx:
+    container_name: study_nginx
+    image: nginx:1.25-alpine3.18
+    depends_on:
+      - php
+    volumes:
+      - ./provisioning/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./app/public:/srv/app/public
+    ports:
+      - '8089:80'
+
+  mysql:
+    container_name: study_mysql
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: start
+      MYSQL_USER: start
+      MYSQL_PASSWORD: start
+      MYSQL_ROOT_PASSWORD: local
+    volumes:
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d
+      - mysql:/var/lib/mysql
+
+volumes:
+  mysql:
